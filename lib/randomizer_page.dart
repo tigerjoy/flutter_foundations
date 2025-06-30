@@ -1,36 +1,33 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class RandomizerPage extends StatefulWidget {
+class RandomizerPage extends HookWidget {
   final int min, max;
+  final random = Random();
 
-  const RandomizerPage({
+  RandomizerPage({
     super.key,
     required this.min,
     required this.max,
   });
 
   @override
-  State<RandomizerPage> createState() => _RandomizerPageState();
-}
-
-class _RandomizerPageState extends State<RandomizerPage> {
-  int? _generatedNumber;
-  final random = Random();
-
-  // To access the properties from the
-  // Page class, use the widget instance
-  // variable
-  void generateRandomNumber() {
-    setState(() {
-      _generatedNumber =
-          random.nextInt(widget.max + 1 - widget.min) + widget.min;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // The value of the generatedNumber
+    // does not change every time the
+    // build method runs
+    final generatedNumber = useState<int?>(null);
+
+    // Using Flutter Hooks, we don't need
+    // to enclose the value change in a
+    // setState(), changing the value
+    // results in a re-render
+    void generateRandomNumber() {
+      generatedNumber.value = random.nextInt(max + 1 - min) + min;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Randomizer'),
@@ -42,7 +39,7 @@ class _RandomizerPageState extends State<RandomizerPage> {
           // Spacer(),
           Center(
             child: Text(
-              _generatedNumber?.toString() ?? "Generate a number",
+              generatedNumber.value?.toString() ?? "Generate a number",
               style: TextStyle(
                 fontSize: 32.0,
               ),

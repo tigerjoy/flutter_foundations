@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_foundations/randomizer_page.dart';
 import 'package:flutter_foundations/range_selector_form.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class RangeSelectorPage extends StatefulWidget {
-  const RangeSelectorPage({super.key});
+// Flutter Hooks are useful when using
+// AnimationController since we can
+// auto dispose the controllers
+// through hooks
 
-  @override
-  State<RangeSelectorPage> createState() => _RangeSelectorPageState();
-}
-
-class _RangeSelectorPageState extends State<RangeSelectorPage> {
+class RangeSelectorPage extends HookWidget {
   final formKey = GlobalKey<FormState>();
 
-  // We need class fields where we can store
-  // the values of the input TextFields
-  int _min = 0;
-  int _max = 0;
+  RangeSelectorPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // When the order in which the hooks
+    // are declared changes, use Hot Restart
+    // instead of Hot Reload
+
+    // State hook
+    final min = useState<int>(0);
+    final max = useState<int>(0);
+
     // Provides an AppBar, Body etc
     return Scaffold(
       appBar: AppBar(
@@ -33,8 +37,8 @@ class _RangeSelectorPageState extends State<RangeSelectorPage> {
       // and validation of the Form Fields
       body: RangeSelectorForm(
         formKey: formKey,
-        minimumValueSetter: (value) => _min = value,
-        maximumValueSetter: (value) => _max = value,
+        minimumValueSetter: (value) => min.value = value,
+        maximumValueSetter: (value) => max.value = value,
       ),
       floatingActionButton: FloatingActionButton(
         // We need to get hold of the Form widget
@@ -56,7 +60,8 @@ class _RangeSelectorPageState extends State<RangeSelectorPage> {
           // page
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => RandomizerPage(min: _min, max: _max),
+              builder: (context) =>
+                  RandomizerPage(min: min.value, max: max.value),
             ),
           );
         },
