@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foundations/randomizer_change_notifier.dart';
+import 'package:provider/provider.dart';
 
 typedef IntValueSetter = void Function(int value);
 
 class RangeSelectorForm extends StatelessWidget {
   final GlobalKey<FormState> formKey;
-  final IntValueSetter minimumValueSetter;
-  final IntValueSetter maximumValueSetter;
 
-  const RangeSelectorForm({
-    super.key,
-    required this.formKey,
-    required this.minimumValueSetter,
-    required this.maximumValueSetter,
-  });
+  const RangeSelectorForm({super.key, required this.formKey});
 
   @override
   Widget build(BuildContext context) {
+    // Since we are not dependent on widget
+    // rebuild whenever any state variable
+    // change, therefore using context.read<>()
+    // call is fine.
+
+    // If we wanted to the widget to be rebuilt
+    // whenever notifyListeners() is called
+    // then the widget needs to be enclosed within
+    // a Consumer<RandomizerChangeNotifier>
+    final randomizerChangeNotifier = context.read<RandomizerChangeNotifier>();
+
     return Form(
       key: formKey,
       child: Padding(
@@ -25,14 +31,14 @@ class RangeSelectorForm extends StatelessWidget {
           children: [
             RangeSelectorTextFormField(
               label: 'Minimum',
-              intValueSetter: minimumValueSetter,
+              intValueSetter: (value) => randomizerChangeNotifier.min = value,
             ),
             SizedBox(
               height: 12,
             ),
             RangeSelectorTextFormField(
               label: 'Maximum',
-              intValueSetter: maximumValueSetter,
+              intValueSetter: (value) => randomizerChangeNotifier.max = value,
             ),
           ],
         ),

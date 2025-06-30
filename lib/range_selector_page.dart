@@ -1,28 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foundations/randomizer_change_notifier.dart';
 import 'package:flutter_foundations/randomizer_page.dart';
 import 'package:flutter_foundations/range_selector_form.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:provider/provider.dart';
 
 // Flutter Hooks are useful when using
 // AnimationController since we can
 // auto dispose the controllers
 // through hooks
 
-class RangeSelectorPage extends HookWidget {
+class RangeSelectorPage extends StatelessWidget {
   final formKey = GlobalKey<FormState>();
 
   RangeSelectorPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // When the order in which the hooks
-    // are declared changes, use Hot Restart
-    // instead of Hot Reload
-
-    // State hook
-    final min = useState<int>(0);
-    final max = useState<int>(0);
-
     // Provides an AppBar, Body etc
     return Scaffold(
       appBar: AppBar(
@@ -35,11 +28,7 @@ class RangeSelectorPage extends HookWidget {
 
       // Form widget orchestrates the saving
       // and validation of the Form Fields
-      body: RangeSelectorForm(
-        formKey: formKey,
-        minimumValueSetter: (value) => min.value = value,
-        maximumValueSetter: (value) => max.value = value,
-      ),
+      body: RangeSelectorForm(formKey: formKey),
       floatingActionButton: FloatingActionButton(
         // We need to get hold of the Form widget
         // defined above. We do so using the
@@ -54,16 +43,30 @@ class RangeSelectorPage extends HookWidget {
             // onSaved callback of all the
             // form fields
             formKey.currentState?.save();
-          }
 
-          // Navigate to the generator
-          // page
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) =>
-                  RandomizerPage(min: min.value, max: max.value),
-            ),
-          );
+            // For using locally scoped providers
+            // final notifier = context
+            //     .read<RandomizerChangeNotifier>(); // ✅ capture here
+
+            // Navigate to the generator
+            // page
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                // Since all the state is
+                // contained in the
+                // RandomizerChangeNotifier
+                // we need not pass the min
+                //and max anymore
+                builder: (context) => const RandomizerPage(),
+
+                // For using locally scoped Providers
+                // builder: (context) => ChangeNotifierProvider.value(
+                //   value: notifier,
+                //   child: const RandomizerPage(),
+                // ),
+              ),
+            );
+          }
         },
         child: Icon(Icons.arrow_forward),
       ),
