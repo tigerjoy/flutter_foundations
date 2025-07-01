@@ -16,6 +16,14 @@ import 'package:flutter/foundation.dart';
 
 // This will be a single class
 // that contains our state
+
+// This is a mutable state management
+// solution.
+
+// There is another approach, called
+// immutable state management solution
+// where each state change is represented
+// with a new copy of the state
 class RandomizerChangeNotifier extends ChangeNotifier {
   final _randomGenerator = Random();
 

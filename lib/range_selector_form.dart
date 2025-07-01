@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_foundations/randomizer_change_notifier.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_foundations/main.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 typedef IntValueSetter = void Function(int value);
 
-class RangeSelectorForm extends StatelessWidget {
+class RangeSelectorForm extends ConsumerWidget {
   final GlobalKey<FormState> formKey;
 
   const RangeSelectorForm({super.key, required this.formKey});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // Since we are not dependent on widget
     // rebuild whenever any state variable
-    // change, therefore using context.read<>()
+    // change, therefore using ref.read()
     // call is fine.
 
     // If we wanted to the widget to be rebuilt
     // whenever notifyListeners() is called
-    // then the widget needs to be enclosed within
-    // a Consumer<RandomizerChangeNotifier>
-    final randomizerChangeNotifier = context.read<RandomizerChangeNotifier>();
+    // then we would use ref.watch()
+    final randomizer = ref.read(randomizerProvider);
 
     return Form(
       key: formKey,
@@ -31,14 +30,14 @@ class RangeSelectorForm extends StatelessWidget {
           children: [
             RangeSelectorTextFormField(
               label: 'Minimum',
-              intValueSetter: (value) => randomizerChangeNotifier.min = value,
+              intValueSetter: (value) => randomizer.min = value,
             ),
             SizedBox(
               height: 12,
             ),
             RangeSelectorTextFormField(
               label: 'Maximum',
-              intValueSetter: (value) => randomizerChangeNotifier.max = value,
+              intValueSetter: (value) => randomizer.max = value,
             ),
           ],
         ),

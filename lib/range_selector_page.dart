@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_foundations/randomizer_change_notifier.dart';
 import 'package:flutter_foundations/randomizer_page.dart';
 import 'package:flutter_foundations/range_selector_form.dart';
-import 'package:provider/provider.dart';
 
 // Flutter Hooks are useful when using
 // AnimationController since we can
