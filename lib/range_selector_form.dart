@@ -11,15 +11,17 @@ class RangeSelectorForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Since we are not dependent on widget
-    // rebuild whenever any state variable
-    // change, therefore using ref.read()
-    // call is fine.
+    // Since we are not dependent on
+    // the state to rebuild the Widgets
+    // therefore I have not added
+    // ref.watch(randomizerProvider)
+    // where randomizerProvider is the state.
 
-    // If we wanted to the widget to be rebuilt
-    // whenever notifyListeners() is called
-    // then we would use ref.watch()
-    final randomizer = ref.read(randomizerProvider);
+    // randomizerProvider.notifier points
+    // to the set of actions / methods
+    // the can be called to modify the
+    // state
+    final randomizer = ref.read(randomizerProvider.notifier);
 
     return Form(
       key: formKey,
@@ -30,14 +32,14 @@ class RangeSelectorForm extends ConsumerWidget {
           children: [
             RangeSelectorTextFormField(
               label: 'Minimum',
-              intValueSetter: (value) => randomizer.min = value,
+              intValueSetter: (value) => randomizer.setMin(value),
             ),
             SizedBox(
               height: 12,
             ),
             RangeSelectorTextFormField(
               label: 'Maximum',
-              intValueSetter: (value) => randomizer.max = value,
+              intValueSetter: (value) => randomizer.setMax(value),
             ),
           ],
         ),

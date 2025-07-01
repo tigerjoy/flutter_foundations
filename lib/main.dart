@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_foundations/randomizer_change_notifier.dart';
+import 'package:flutter_foundations/randomizer_state_notifier.dart';
 import 'package:flutter_foundations/range_selector_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -38,9 +38,10 @@ void main() {
 // When we try to access this provider,
 // and it is not yet created, then it
 // gets scoped
-final randomizerProvider = ChangeNotifierProvider(
-  (ref) => RandomizerChangeNotifier(),
-);
+final randomizerProvider =
+    StateNotifierProvider<RandomizerStateNotifier, RandomizerState>(
+      (ref) => RandomizerStateNotifier(),
+    );
 
 class AppWidget extends StatelessWidget {
   const AppWidget({super.key});

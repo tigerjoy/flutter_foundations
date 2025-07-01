@@ -7,16 +7,12 @@ class RandomizerPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Since we are using ref.watch(), therefor
-    // any time the notifyListeners() is called
-    // the entire widget will change.
+    // randomizerProvider points to the state
 
-    // Therefore, we must be cautious when using
-    // ref.watch() at the top of the build() method.
-    // Either break it into smaller ConsumerWidgets
-    // or make use of Consumer() builder inside a
-    // Stateless widget (as the commented code present
-    // below)
+    // randomizerProvider.notifier points
+    // to the set of actions / methods
+    // the can be called to modify the
+    // state
     final randomizer = ref.watch(randomizerProvider);
     final generatedNumber = randomizer.generatedNumber;
 
@@ -45,8 +41,7 @@ class RandomizerPage extends ConsumerWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        // onPressed: randomizer.generateRandomNumber,
-        onPressed: ref.read(randomizerProvider).generateRandomNumber,
+        onPressed: ref.read(randomizerProvider.notifier).generateRandomNumber,
         label: Text("Generate"),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
